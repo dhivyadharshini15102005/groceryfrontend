@@ -1,0 +1,120 @@
+/* Overall background for the page */
+body {
+  background: linear-gradient(135deg, #f1d1e2, #f9e0e9); /* Soft pink gradient */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Signup Container */
+.signup-container {
+  width: 100%;
+  max-width: 450px; /* Increased width for more spacious design */
+  margin: 40px auto;
+  padding: 30px;
+  border: 1px solid #e5a6ca; /* Light pink border */
+  border-radius: 12px;
+  background-color: #f8d9ec; /* Soft pink background */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Elevated box shadow for depth */
+  animation: fadeIn 0.6s ease-out; /* Fade in effect */
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Heading Styling */
+.signup-container h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #8f1e6b; /* Darker pink */
+  margin-bottom: 20px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Input Field Styling */
+.signup-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0; /* Increased margin for more space */
+  border: 1px solid #e2a3c1; /* Soft pink border */
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff; /* White background for inputs */
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+/* Input Focus Effect */
+.signup-container input:focus {
+  border-color: #8f1e6b; /* Darker pink border on focus */
+  outline: none;
+  box-shadow: 0 0 5px rgba(143, 30, 107, 0.5); /* Soft glow effect */
+}
+
+/* Signup Button Styling */
+.signup-container .signup-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #8f1e6b; /* Darker pink */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease-in-out;
+}
+
+.signup-container .signup-btn:hover {
+  background-color: #df1c7d; /* Brighter pink on hover */
+  transform: translateY(-3px); /* Slight lift effect */
+}
+
+/* Link Styling for Login and Back to Home */
+.signup-container .login-link,
+.signup-container .back-to-home {
+  text-decoration: none;
+  color: #007BFF; /* Blue color for links */
+  font-size: 1rem;
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+/* Hover Effect for Links */
+.signup-container .login-link:hover,
+.signup-container .back-to-home:hover {
+  color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .signup-container {
+    padding: 20px;
+    margin: 20px;
+    max-width: 100%;
+  }
+
+  .signup-container h2 {
+    font-size: 1.6rem;
+  }
+
+  .signup-container input {
+    font-size: 1rem;
+  }
+
+  .signup-container .signup-btn {
+    font-size: 1.1rem;
+  }
+}
