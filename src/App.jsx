@@ -4,7 +4,7 @@ import GroceryList from "./components/GroceryList";
 import Cart from "./components/Cart";
 import UserDetails from "./components/UserDetails";
 import Payment from "./components/Payment";
-import Login from "./components/login";
+import Login from "./components/Login";
 import Signup from "./components/Signup";
 import AboutUs from "./components/AboutUs";
 import "./App.css";
