@@ -15,13 +15,14 @@ const UserDetails = () => {
   });
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserDetails({
-      ...userDetails,
+    setUserDetails((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
 
     // Navigate to Payment page if "Online Payment" is selected
     if (name === 'paymentMethod' && value === 'online') {
@@ -32,33 +33,45 @@ const UserDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Phone number validation
+    if (!/^\d{10}$/.test(userDetails.phone)) {
+      setErrorMessage("Phone number must be exactly 10 digits.");
+      return;
+    }
+
     const orderData = {
       name: userDetails.name,
       phone: userDetails.phone,
       location: userDetails.location,
       paymentMethod: userDetails.paymentMethod,
-      totalAmount: totalAmount,
-      cart: cart,
+      totalAmount,
+      cart: cart.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.selectedQuantity || item.quantity, // Ensure correct quantity
+      })),
     };
 
     try {
-      const response = await fetch('http://localhost:3001/order/order', {
+      const response = await fetch('http://localhost:3001/order', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
       });
 
       const data = await response.json();
+
       if (response.ok) {
-        setSuccessMessage('Order placed successfully!');
+        setSuccessMessage("Order placed successfully!");
+        setErrorMessage('');
+        navigate('/order-success', { state: { orderId: data.orderId } });
       } else {
-        setSuccessMessage(`Error: ${data.message}`);
+        setErrorMessage(data.message || "Error placing order.");
       }
     } catch (err) {
       console.error("Error submitting order:", err);
-      setSuccessMessage('There was an error placing your order. Please try again.');
+      setErrorMessage("There was an error placing your order. Please try again.");
     }
   };
 
@@ -69,7 +82,7 @@ const UserDetails = () => {
       <h3>Your Cart Items:</h3>
       <ul>
         {cart.map(item => (
-          <li key={item.id}>{item.name} - Quantity: {item.selectedQuantity}</li>
+          <li key={item.id}>{item.name} - Quantity: {item.selectedQuantity || item.quantity}</li>
         ))}
       </ul>
       <form onSubmit={handleSubmit}>
@@ -79,7 +92,7 @@ const UserDetails = () => {
         </div>
         <div>
           <label>Phone Number:</label>
-          <input type="tel" name="phone" value={userDetails.phone} onChange={handleChange} required />
+          <input type="tel" name="phone" value={userDetails.phone} onChange={handleChange} required maxLength="10" />
         </div>
         <div>
           <label>Location:</label>
@@ -95,6 +108,7 @@ const UserDetails = () => {
         <button type="submit">Submit</button>
       </form>
       {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };
