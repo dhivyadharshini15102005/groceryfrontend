@@ -44,16 +44,7 @@ npm install
 # 4. Start the development server
 npm run dev
 
-## 📸 Screenshots
 
-### Home Page
-![Home Page](./assets/homepg.png)
-
-### Cart Page
-![Cart Page](./assets/cartpg.png)
-
-### Billing Page
-![Billing Page](./assets/Billingpg.png)
 
 ## 🎬 Demo Video
 
