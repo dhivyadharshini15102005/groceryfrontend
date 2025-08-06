@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
-import './Login.css'; // Import the CSS for login styling
+import './Login.css';
 
-const Login = () => {
-  const [username, setUsername] = useState('');
+const Login = ({ onLoginSuccess }) => {
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
@@ -12,22 +12,28 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post('http://localhost:3001/login', {
-        username,
+        userName, // match backend field
         password,
       });
 
-      if (response.data.success) {
-        // Handle successful login
-        console.log('Login successful:', response.data);
-        // Navigate to the home page or another page
-        navigate('/home');
+      console.log('Login successful:', response.data);
+
+      // If login is successful (status 200), trigger success logic
+      if (response.status === 200) {
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        }
+        navigate('/'); // Redirect to home
       } else {
-        // Handle login failure
-        alert('Invalid credentials');
+        alert(response.data.message || 'Login failed. Please try again.');
       }
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert('Invalid username or password');
+      } else {
+        alert('An error occurred. Please try again.');
+      }
       console.error('Login failed:', error);
-      alert('An error occurred. Please try again.');
     }
   };
 
@@ -39,8 +45,8 @@ const Login = () => {
           type="text"
           placeholder="Username"
           id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           required
         />
         <input

@@ -770,7 +770,7 @@ header h1 {
   width: 100%;
   padding: 12px;
   border: 2px solid #aaa;
-  border-radius: 6px;
+  border-radius: 6px;h
   font-size: 1rem;
   color: #333;
   background-color: #f9f9f9;
@@ -818,7 +818,7 @@ body {
   margin: 0;
   padding: 0;
 }
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow : 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .about-section h2 {
@@ -931,3 +931,47 @@ body {
   margin: 0;
   padding: 0;
 }
+.logout-link {
+  color: #f414a9; /* same as nav links */
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 0 20px;
+  transition: color 0.3s ease-in-out;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.logout-link:hover {
+  color: #400250; /* purple on hover */
+  text-decoration: underline;
+}
+
+/* Reset nav styles to previous state */
+nav {
+  display: flex;
+  justify-content: center; /* Center navigation links */
+  background-color: #ceb0e9; /* White background */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Space below the nav */
+}
+
+nav a {
+  font-size: 1.2rem;
+  color: #f414a9; /* Blue color */
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 20px;
+  transition: color 0.3s ease-in-out;
+}
+
+nav a:hover {
+  color: #400250; /* Change color to purple on hover */
+  text-decoration: underline;
+}
+
+

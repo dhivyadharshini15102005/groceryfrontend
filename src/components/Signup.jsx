@@ -14,6 +14,7 @@ const Signup = () => {
   const handleSignup = async (event) => {
     event.preventDefault();
     console.log('Event triggered');
+
     try {
       const req = await axios.post('http://localhost:3001/signup', {
         firstName: firstname,
@@ -22,9 +23,25 @@ const Signup = () => {
         email: email,
         password: password,
       });
+
       console.log('Signup successful:', req.data);
-      navigate('/home'); // Navigate to home page after successful signup
+      alert(req.data.message); // Optional success alert
+      navigate('/home'); // Redirect to home on success
     } catch (err) {
+      if (err.response) {
+        const status = err.response.status;
+        const message = err.response.data.message;
+
+        if (status === 409) {
+          alert('❌ Username or Email already exists. Please use a different one.');
+        } else if (status === 400) {
+          alert('⚠️ Please fill in all the required fields.');
+        } else {
+          alert(`🚫 Signup failed: ${message}`);
+        }
+      } else {
+        alert('🚨 Network error or server is down.');
+      }
       console.error('Signup error:', err);
     }
   };

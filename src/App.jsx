@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import GroceryList from "./components/GroceryList";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  Navigate,
+} from "react-router-dom";
+import GroceryList from "./components/GroceryList"; 
 import Cart from "./components/Cart";
 import UserDetails from "./components/UserDetails";
 import Payment from "./components/Payment";
@@ -13,11 +19,16 @@ const App = () => {
   const [cart, setCart] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Login state
 
   const categories = ["All", "Fruits", "Vegetables", "Dairy", "Beverages"];
 
-  // Add item to cart or increase quantity if it exists
   const addToCart = (item) => {
+    if (!isLoggedIn) {
+      alert("Please login to add items to the cart.");
+      return;
+    }
+
     setCart((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
       if (existingItem) {
@@ -32,12 +43,10 @@ const App = () => {
     });
   };
 
-  // Remove item from cart
   const removeFromCart = (itemToRemove) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== itemToRemove.id));
   };
 
-  // Update item quantity in cart (Ensures item is not removed when quantity reaches 1)
   const updateQuantity = (item, action) => {
     setCart((prevCart) =>
       prevCart.map((cartItem) =>
@@ -47,18 +56,22 @@ const App = () => {
               selectedQuantity:
                 action === "increase"
                   ? (cartItem.selectedQuantity || 0) + 1
-                  : Math.max((cartItem.selectedQuantity || 0) - 1, 1), // Prevents removing item
+                  : Math.max((cartItem.selectedQuantity || 0) - 1, 1),
             }
           : cartItem
       )
     );
   };
 
-  // Calculate total amount
   const totalAmount = cart.reduce(
     (sum, item) => sum + (item.price || 0) * (item.selectedQuantity || 0),
     0
   );
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    alert("You have been logged out.");
+  };
 
   return (
     <Router>
@@ -69,9 +82,23 @@ const App = () => {
 
         <nav>
           <Link to="/">Home</Link>
-          <Link to="/cart">Cart</Link>
-          <Link to="/signup">Signup</Link>
-          <Link to="/login">Login</Link>
+          {/* Cart link redirects to login if not logged in */}
+          <Link to={isLoggedIn ? "/cart" : "/login"}>Cart</Link>
+
+          {!isLoggedIn ? (
+            <Link to="/login">Login</Link>
+          ) : (
+            <a
+              href="#logout"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+              className="logout-link"
+            >
+              Logout
+            </a>
+          )}
           <Link to="/about">About Us</Link>
         </nav>
 
@@ -82,7 +109,10 @@ const App = () => {
             onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
             className="search-bar"
           />
-          <select onChange={(e) => setCategory(e.target.value)} className="category-select">
+          <select
+            onChange={(e) => setCategory(e.target.value)}
+            className="category-select"
+          >
             {categories.map((cat, index) => (
               <option key={index} value={cat}>
                 {cat}
@@ -94,17 +124,38 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={<GroceryList addToCart={addToCart} searchTerm={searchTerm} category={category} />}
+            element={
+              <GroceryList
+                addToCart={addToCart}
+                searchTerm={searchTerm}
+                category={category}
+              />
+            }
           />
           <Route
             path="/cart"
             element={
-              <Cart cart={cart} setCart={setCart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />
+              isLoggedIn ? (
+                <Cart
+                  cart={cart}
+                  setCart={setCart}
+                  removeFromCart={removeFromCart}
+                  updateQuantity={updateQuantity}
+                />
+              ) : (
+                <Navigate to="/login" replace />
+              )
             }
           />
-          <Route path="/user-details" element={<UserDetails totalAmount={totalAmount} cart={cart} />} />
+          <Route
+            path="/user-details"
+            element={<UserDetails totalAmount={totalAmount} cart={cart} />}
+          />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={<Login onLoginSuccess={() => setIsLoggedIn(true)} />}
+          />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/payment" element={<Payment />} />
         </Routes>

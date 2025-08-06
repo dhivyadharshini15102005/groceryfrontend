@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Cartstyle.css";
 
 const Cart = ({ cart, setCart, removeFromCart, updateQuantity }) => {
   const navigate = useNavigate();
 
-  // Calculate total amount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token || token === "undefined" || token === "") {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const totalAmount = cart.reduce(
     (sum, item) => sum + ((item.price || 0) * (item.selectedQuantity || 0)),
     0
   );
 
-  // Navigate to UserDetails page with cart data
   const handleNext = () => {
     navigate("/user-details", {
       state: {
@@ -64,7 +69,10 @@ const Cart = ({ cart, setCart, removeFromCart, updateQuantity }) => {
                   <td>${(item.price || 0).toFixed(2)}</td>
                   <td>${((item.price || 0) * (item.selectedQuantity || 0)).toFixed(2)}</td>
                   <td>
-                    <button className="remove-button" onClick={() => removeFromCart(item)}>
+                    <button
+                      className="remove-button"
+                      onClick={() => removeFromCart(item)}
+                    >
                       Remove
                     </button>
                   </td>
