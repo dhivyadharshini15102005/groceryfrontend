@@ -1,4 +1,4 @@
-# 🛒 Grocery Shopping App – Frontend
+# 🛒 Grocery Shopping App
 
 A sleek, fast, and responsive online grocery shopping web app built using **React + Vite**. This frontend provides users with a seamless shopping experience, including product browsing, cart management, and smooth navigation.
 
